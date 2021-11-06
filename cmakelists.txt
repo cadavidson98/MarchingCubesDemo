@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.9)
+project(MarchingCubes)
+
+set(CUR_DIR ${CMAKE_CURRENT_SOURCE_DIR}/data)
+# Configure a header file to pass some of the CMake settings to the source code
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/config.h.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/config.h
+)
+
+set(SOURCEFILES 
+    src/main.cpp 
+    src/marching_cubes.cpp)
+set(HEADERFILES 
+    include/marching_cubes.h
+    include/lookup_tables.h
+    include/config.h)
+add_executable(${PROJECT_NAME} ${SOURCEFILES} ${HEADERFILES})
+
+add_subdirectory(extern/glfw)
+add_subdirectory(extern/glm)
+add_subdirectory(extern/glad)
+
+find_package(OpenGL REQUIRED)
+
+target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_link_libraries(${PROJECT_NAME} glad glm glfw OpenGL::GL)
